@@ -1,32 +1,20 @@
-# lecture7_examples
-Computing the inverse kinematics of a robot using KDL
+# KDL_example
+Computing the inverse kinematics of a robot using KDL. Builds on the previous example: [URDF_example](https://github.com/Vanderbilt-Applied-Robotics-Lab/URDF_example)
 
-# Build example
-```bash
-cd ~/workspace/examples_ws/
-```
-```bash
-colcon build
-```
-# Run example
-```bash
-cd ~/workspace/examples_ws/
-```
-```bash
-cd source install/setup.bash
-```
-Run previous example
-```bash
-ros2 launch scara_urdf_example scara.launch.py
-```
-In a new terminal window, source then run:
-```bash
-cd source install/setup.bash
-ros2 run kdl_example kdl_example
-```
-Open a new terminal window
-```bash
-cd source install/setup.bash
-rqt
-```
-Use the message publisher to publish message on the `/goal_position` topic
+## Downloading Code
+1. Navigate to examples workspace source folder: `cd ~/workspaces/examples_ws/src`
+2. Download code: `https://github.com/Vanderbilt-Applied-Robotics-Lab/KDL_example.git`
+
+## Compiling Code
+1. Navigate to examples workspace: `cd ~/workspaces/examples_ws`
+2. Compile the code: `colcon build`
+
+## Running Code
+1. Navigate to examples workspace: `cd ~/workspaces/examples_ws`
+2. Source the code: `source install/setup.bash`
+3. Run previous example: `ros2 launch scara_urdf_example scara.launch.py`
+4. Open a new terminal window
+5. Source the code: `source install/setup.bash`
+6. Run the example: `ros2 run kdl_example kdl_example`
+7. Open a new terminal window
+8. Use RQT to publish to the `/goal_position` topic (see the instructions on the lecture slides): `rqt`
