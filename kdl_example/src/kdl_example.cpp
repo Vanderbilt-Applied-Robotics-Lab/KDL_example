@@ -45,40 +45,42 @@ void KDLExample::goalPositionCallback(const geometry_msgs::msg::PointStamped & m
 
 void KDLExample::solveIK()
 {
-  
-  // setup initial guess for joint angles
-  KDL::JntArray q_init(chain_.getNrOfJoints());
-  q_init(0) = 0.0; q_init(1) = 0.0; q_init(2) = 0.0; q_init(3) = 0.0; // all zeros
-
-  // Convert Eigen::Vector3d to KDL::Vector
-  KDL::Vector kdl_position(goal_position_[0], goal_position_[1], goal_position_[2]);
-
-  KDL::Rotation kdl_rotation = KDL::Rotation::Quaternion(
-      goal_orientation_.x(), goal_orientation_.y(), goal_orientation_.z(), goal_orientation_.w()
-    );
-  
-  // Construct the KDL::Frame
-  KDL::Frame desired_ee_frame(kdl_rotation, kdl_position);
-
-  // SOLVE IK
-  int error = ik_solver_->CartToJnt(q_init, desired_ee_frame, q_);
-
-  if (error == KDL::ChainIkSolverPos_LMA::E_NOERROR) // if no error -> publish joint angles
+  if (ik_solver_ !=nullptr) // check if the IK solver is correctly setup
   {
-    // set header
-    joint_state_msg_.header.stamp = this->get_clock()->now();
+    // setup initial guess for joint angles
+    KDL::JntArray q_init(chain_.getNrOfJoints());
+    q_init(0) = 0.0; q_init(1) = 0.0; q_init(2) = 0.0; q_init(3) = 0.0; // all zeros
+
+    // Convert Eigen::Vector3d to KDL::Vector
+    KDL::Vector kdl_position(goal_position_[0], goal_position_[1], goal_position_[2]);
+
+    KDL::Rotation kdl_rotation = KDL::Rotation::Quaternion(
+        goal_orientation_.x(), goal_orientation_.y(), goal_orientation_.z(), goal_orientation_.w()
+      );
     
-    // copy joint data into message
-    std::copy(q_.data.begin(), q_.data.end(), joint_state_msg_.position.begin());
+    // Construct the KDL::Frame
+    KDL::Frame desired_ee_frame(kdl_rotation, kdl_position);
 
-    // publish
-    joint_pub_->publish(joint_state_msg_);
+    // SOLVE IK
+    int error = ik_solver_->CartToJnt(q_init, desired_ee_frame, q_);
 
-    RCLCPP_INFO(this->get_logger(), "Inverse kinematics successful!");
-  }
-  else
-  {
-    RCLCPP_ERROR(this->get_logger(), "Inverse kinematics failed!");
+    if (error == KDL::ChainIkSolverPos_LMA::E_NOERROR) // if no error -> publish joint angles
+    {
+      // set header
+      joint_state_msg_.header.stamp = this->get_clock()->now();
+      
+      // copy joint data into message
+      std::copy(q_.data.begin(), q_.data.end(), joint_state_msg_.position.begin());
+
+      // publish
+      joint_pub_->publish(joint_state_msg_);
+
+      RCLCPP_INFO(this->get_logger(), "Inverse kinematics successful!");
+    }
+    else
+    {
+      RCLCPP_ERROR(this->get_logger(), "Inverse kinematics failed!");
+    }
   }
 }
 
