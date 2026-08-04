@@ -3,7 +3,7 @@ Computing the inverse kinematics of a robot using KDL. Builds on the previous ex
 
 ## Downloading Code
 1. Navigate to examples workspace source folder: `cd ~/workspaces/examples_ws/src`
-2. Download code: `https://github.com/Vanderbilt-Applied-Robotics-Lab/KDL_example.git`
+2. Download code: `git clone https://github.com/Vanderbilt-Applied-Robotics-Lab/KDL_example.git`
 
 ## Compiling Code
 1. Navigate to examples workspace: `cd ~/workspaces/examples_ws`
